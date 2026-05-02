@@ -257,6 +257,24 @@ async def _run_async(
         if not todo:
             return summary
 
+        # Register this run with sudco-api so the dashboard can show live
+        # 3-bar progress without having to tail the agent log. Best-effort:
+        # API failures here don't stop the analyze run.
+        run_id: int | None = None
+        try:
+            run_id = await asyncio.to_thread(
+                api.start_pipeline_run,
+                kind="analyze",
+                total=len(todo),
+                meta={
+                    "concurrency": concurrency,
+                    "delay_seconds": delay_seconds,
+                    "force": force,
+                },
+            )
+        except Exception as exc:
+            log.warning("Could not register analyze pipeline run with API: %s", exc)
+
         async with async_playwright() as pw:
             browser = await pw.chromium.launch(headless=True)
             queue: asyncio.Queue = asyncio.Queue()
@@ -278,6 +296,10 @@ async def _run_async(
                 "browser_ready": browser_ready,
                 "in_flight": 0,
                 "completed_since_recycle": 0,
+                # Buckets mirror the three rich Progress bars 1:1. Published
+                # to sudco-api by progress_publisher() so the dashboard shows
+                # the same found/no-rating/captcha split.
+                "buckets": {"a": 0, "b": 0, "c": 0},
             }
 
             # Three stacked bars — one per outcome bucket. Each prospect
@@ -309,8 +331,14 @@ async def _run_async(
                 # whenever this one advances. End of run: each bar = N/N.
                 bar_totals = {task_found: total, task_norating: total, task_problem: total}
 
+                # Maps each rich-Progress bar to the API's bucket key so a
+                # single land() call updates both the local UI and the
+                # publisher's view of remote state.
+                bar_bucket = {task_found: "a", task_norating: "b", task_problem: "c"}
+
                 def land(landing_task) -> None:
                     bar.advance(landing_task)
+                    state["buckets"][bar_bucket[landing_task]] += 1
                     for t in (task_found, task_norating, task_problem):
                         if t is landing_task:
                             continue
@@ -496,18 +524,44 @@ async def _run_async(
                         # Jittered delay — ±40% of the current base delay.
                         await asyncio.sleep(state["delay"] * random.uniform(0.6, 1.4))
 
+                async def progress_publisher() -> None:
+                    """Push bucket counters to sudco-api once per second
+                    while the run is active. Diff-checked so we don't
+                    hammer the API with no-op patches."""
+                    if run_id is None:
+                        return
+                    last = (-1, -1, -1, -1)
+                    while not summary["aborted"]:
+                        await asyncio.sleep(1.0)
+                        b = state["buckets"]
+                        cur = (b["a"], b["b"], b["c"], summary["skipped"])
+                        if cur == last:
+                            continue
+                        try:
+                            await asyncio.to_thread(
+                                api.update_pipeline_run, run_id,
+                                bucket_a=cur[0], bucket_b=cur[1],
+                                bucket_c=cur[2], skipped=cur[3],
+                            )
+                            last = cur
+                        except Exception as exc:
+                            log.debug("pipeline progress update failed: %s", exc)
+
                 # Spawn the maximum starting workers. Some will retire as
                 # back-off shrinks `concurrency_target`.
                 workers = [asyncio.create_task(worker(i)) for i in range(concurrency)]
                 recycler_task = asyncio.create_task(recycler())
+                publisher_task = asyncio.create_task(progress_publisher())
                 try:
                     await asyncio.gather(*workers, return_exceptions=True)
                 finally:
                     recycler_task.cancel()
-                    try:
-                        await recycler_task
-                    except (asyncio.CancelledError, Exception):
-                        pass
+                    publisher_task.cancel()
+                    for t in (recycler_task, publisher_task):
+                        try:
+                            await t
+                        except (asyncio.CancelledError, Exception):
+                            pass
                     # Yield a tick so Playwright internal tasks (request
                     # listeners spun up inside contexts that closed mid-flight)
                     # finish before the browser is torn down. Without this,
@@ -518,5 +572,29 @@ async def _run_async(
                         await state["browser"].close()
                     except Exception:
                         pass
+
+        # Best-effort final progress + finish report. If this fails the run
+        # will eventually be swept by sudco-api's stale-run reaper.
+        if run_id is not None:
+            try:
+                await asyncio.to_thread(
+                    api.update_pipeline_run, run_id,
+                    bucket_a=state["buckets"]["a"],
+                    bucket_b=state["buckets"]["b"],
+                    bucket_c=state["buckets"]["c"],
+                    skipped=summary["skipped"],
+                )
+            except Exception as exc:
+                log.debug("final pipeline progress update failed: %s", exc)
+            try:
+                final_status = "failed" if summary.get("aborted") else "completed"
+                err_msg = ("aborted: captcha back-off floor reached"
+                           if summary.get("aborted") else None)
+                await asyncio.to_thread(
+                    api.finish_pipeline_run, run_id,
+                    status=final_status, error=err_msg,
+                )
+            except Exception as exc:
+                log.warning("could not mark analyze run finished: %s", exc)
 
     return summary

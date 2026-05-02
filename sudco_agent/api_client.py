@@ -216,6 +216,37 @@ class SudcoAPI:
             params["source"] = source
         return self._req("GET", "/admin/searches", params=params)["searches"]
 
+    # ---- pipeline runs (enrich + analyze progress) ----
+    def start_pipeline_run(self, *, kind: str, total: int,
+                           meta: dict | None = None) -> int:
+        body = {"kind": kind, "total": total, "meta": meta or {}}
+        return self._req("POST", "/admin/pipeline-runs", json=body)["run"]["id"]
+
+    def update_pipeline_run(self, run_id: int, *,
+                            total: int | None = None,
+                            bucket_a: int | None = None,
+                            bucket_b: int | None = None,
+                            bucket_c: int | None = None,
+                            skipped: int | None = None,
+                            meta: dict | None = None) -> None:
+        body: dict = {}
+        if total is not None: body["total"] = total
+        if bucket_a is not None: body["bucket_a"] = bucket_a
+        if bucket_b is not None: body["bucket_b"] = bucket_b
+        if bucket_c is not None: body["bucket_c"] = bucket_c
+        if skipped is not None: body["skipped"] = skipped
+        if meta is not None: body["meta"] = meta
+        if not body:
+            return
+        self._req("PATCH", f"/admin/pipeline-runs/{run_id}", json=body)
+
+    def finish_pipeline_run(self, run_id: int, *,
+                            status: str = "completed",
+                            error: str | None = None) -> None:
+        body = {"status": status}
+        if error: body["error"] = error
+        self._req("POST", f"/admin/pipeline-runs/{run_id}/finish", json=body)
+
     # ---- demos ----
     def create_demo(
         self,

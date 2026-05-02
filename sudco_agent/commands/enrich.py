@@ -88,6 +88,27 @@ async def _run_async(
         if queued == 0:
             return summary
 
+        # Register this run with sudco-api so the dashboard shows live
+        # progress. Best-effort: API failures don't stop the enrich run.
+        run_id: int | None = None
+        try:
+            run_id = await asyncio.to_thread(
+                api.start_pipeline_run,
+                kind="enrich",
+                total=queued,
+                meta={
+                    "concurrency": concurrency,
+                    "max_age_days": max_age_days,
+                    "force": force,
+                },
+            )
+            if summary["skipped"]:
+                await asyncio.to_thread(
+                    api.update_pipeline_run, run_id, skipped=summary["skipped"],
+                )
+        except Exception as exc:
+            log.warning("Could not register enrich pipeline run with API: %s", exc)
+
         with Progress(
             TextColumn("[bold blue]enrich"),
             BarColumn(),
@@ -120,8 +141,61 @@ async def _run_async(
                                errs=summary["errors"])
                     bar.advance(bar_id)
 
+            done_event = asyncio.Event()
+
+            async def progress_publisher() -> None:
+                """Mirror the rich Progress fields to sudco-api once per
+                second. Diff-checked so we don't post no-op patches."""
+                if run_id is None:
+                    return
+                last = (-1, -1, -1, -1)
+                while not done_event.is_set():
+                    try:
+                        await asyncio.wait_for(done_event.wait(), timeout=1.0)
+                    except asyncio.TimeoutError:
+                        pass
+                    cur = (summary["found_email"], summary["no_email"],
+                           summary["errors"], summary["skipped"])
+                    if cur == last:
+                        continue
+                    try:
+                        await asyncio.to_thread(
+                            api.update_pipeline_run, run_id,
+                            bucket_a=cur[0], bucket_b=cur[1],
+                            bucket_c=cur[2], skipped=cur[3],
+                        )
+                        last = cur
+                    except Exception as exc:
+                        log.debug("pipeline progress update failed: %s", exc)
+
             workers = [asyncio.create_task(worker(i)) for i in range(concurrency)]
-            await asyncio.gather(*workers, return_exceptions=True)
+            publisher_task = asyncio.create_task(progress_publisher())
+            try:
+                await asyncio.gather(*workers, return_exceptions=True)
+            finally:
+                done_event.set()
+                try:
+                    await publisher_task
+                except (asyncio.CancelledError, Exception):
+                    pass
+
+        if run_id is not None:
+            try:
+                await asyncio.to_thread(
+                    api.update_pipeline_run, run_id,
+                    bucket_a=summary["found_email"],
+                    bucket_b=summary["no_email"],
+                    bucket_c=summary["errors"],
+                    skipped=summary["skipped"],
+                )
+            except Exception as exc:
+                log.debug("final pipeline progress update failed: %s", exc)
+            try:
+                await asyncio.to_thread(
+                    api.finish_pipeline_run, run_id, status="completed",
+                )
+            except Exception as exc:
+                log.warning("could not mark enrich run finished: %s", exc)
 
     return summary
 
