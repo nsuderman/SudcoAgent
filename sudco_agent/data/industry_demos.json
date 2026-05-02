@@ -1,0 +1,56 @@
+{
+  "bakery": [
+    "bakery",
+    "cafe",
+    "café",
+    "patisserie",
+    "donut",
+    "doughnut",
+    "pastry",
+    "coffee shop",
+    "coffeehouse"
+  ],
+  "apex-plumbing": [
+    "plumber",
+    "plumbing",
+    "hvac",
+    "heating",
+    "cooling",
+    "ac repair",
+    "air conditioning",
+    "boiler",
+    "drain"
+  ],
+  "riverside-dental": [
+    "dental",
+    "dentist",
+    "orthodontist",
+    "endodontist",
+    "oral surgeon",
+    "periodontist"
+  ],
+  "greenleaf-landscaping": [
+    "landscape",
+    "landscaping",
+    "lawn",
+    "lawn care",
+    "tree service",
+    "garden",
+    "nursery",
+    "arborist"
+  ],
+  "urban-fitness": [
+    "fitness",
+    "gym",
+    "yoga",
+    "pilates",
+    "crossfit",
+    "personal trainer",
+    "martial arts"
+  ],
+  "wild-stem": [
+    "florist",
+    "flower shop",
+    "flower"
+  ]
+}

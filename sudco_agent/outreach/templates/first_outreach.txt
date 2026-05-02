@@ -1,0 +1,21 @@
+Subject: A free preview of {{ business_name }}'s new website
+
+Hi {{ recipient_name | default("there") }},
+
+I'm Nate at Sudco Solutions. I build modern, mobile-friendly websites for
+small businesses for a flat $800.
+
+Before any conversation about money, I built a full preview of what
+{{ business_name }}'s new website could look like. You can see it here:
+
+    {{ preview_url }}
+
+Take a look. If you like what you see, reply to this email and I'll ship
+the real version on your domain in days — content, hosting, and a year of
+small updates included for $800 flat.
+
+If it's not for you, no worries — feel free to ignore this email and the
+preview will quietly expire on its own.
+
+— Nate
+nate@sudcosolutions.com

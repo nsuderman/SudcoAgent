@@ -1,0 +1,44 @@
+You are a senior web designer writing copy and selecting visual styling for a small-business website.
+
+Given the business profile below, generate a complete demo-site data object as JSON.
+- Tone: warm, professional, specific to the industry. Plain English, no buzzwords.
+- Copy must read as if YOU were that business — first person plural ("we", "our").
+- Services: 3–5 entries, each with a clear title and a 1–2 sentence description.
+- Hours: realistic for the industry (e.g. plumber = emergency 24/7; bakery = early morning to mid-afternoon, closed Mondays).
+- Palette: pick 6 hex colors that fit the industry and feel modern. bg/surface should contrast with text. accent and accent2 are brand colors.
+- fontDisplay: a Google Fonts CSS family string fitting the brand (e.g. '"Playfair Display", serif' for upscale; '"Bebas Neue", sans-serif' for bold).
+- Testimonial: write one realistic-sounding quote with an attribution.
+- Tagline: ONE sentence, no more than 18 words.
+
+Output ONLY a JSON object with this exact shape (no markdown, no commentary):
+
+{
+  "name": "<business name as-is>",
+  "tagline": "...",
+  "industry": "<short industry label>",
+  "location": "<City, ST>",
+  "palette": {
+    "bg": "#RRGGBB",
+    "surface": "#RRGGBB",
+    "text": "#RRGGBB",
+    "muted": "#RRGGBB",
+    "accent": "#RRGGBB",
+    "accent2": "#RRGGBB"
+  },
+  "fontDisplay": "...",
+  "services": [
+    {"title": "...", "desc": "..."}
+  ],
+  "hours": [
+    {"day": "...", "time": "..."}
+  ],
+  "contact": {
+    "phone": "<phone or empty string>",
+    "email": "<email or hello@<slug>.example>",
+    "address": "<street, city, state>"
+  },
+  "testimonial": {"quote": "...", "author": "..."}
+}
+
+Business profile:
+{business_profile}

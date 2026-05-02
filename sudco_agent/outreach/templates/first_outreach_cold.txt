@@ -1,0 +1,57 @@
+Subject: Helping {{ business_name }} get more out of every review
+
+Hi {{ recipient_name | default("there", true) }},
+
+I'm Nate Suderman, founder of Sudco Solutions — a small Houston-based
+shop that helps local businesses turn their reputation into more
+walk-ins, calls, and bookings.
+
+{% if site_observation -%}
+{{ site_observation }}
+
+That's the angle I'd love to help {{ business_name }} amplify. Most
+small-business owners I work with are doing great work — they just
+don't have a system that captures it and gets it in front of the next
+customer searching nearby.
+{%- else -%}
+Saw {{ business_name }}{% if location %} in {{ location }}{% endif %} and
+wanted to put my name in your back pocket. Most small-business owners
+I work with are doing great work — they just don't have a system that
+captures it and gets it in front of the next customer searching nearby.
+{%- endif %}
+
+A few ways I help, depending on what you need:
+
+  • Site refresh or full build — clean, fast, mobile-friendly, designed
+    so your reviews and best work are the first thing visitors see.
+    $800 flat with a year of small updates included.
+
+  • Google Business Profile + local SEO setup — making sure when
+    someone searches "{{ industry_lower | default('your industry', true) }} near me," your listing is
+    optimized, photos are sharp, hours/categories are right. $300–500
+    one-time.
+
+  • Review-request automation — quietly nudges happy customers to
+    leave a review after their visit. Most of my clients see review
+    counts climb 2–3× in the first 90 days. $200/month.
+
+  • Reputation monitoring — alerts on new reviews (good and bad), with
+    draft response copy ready to go so you can reply quickly without
+    starting from a blank page. $150/month.
+
+{% if has_demo -%}
+If it's useful, you can see a sample {{ industry_lower }} site I built at
+{{ demo_visible_url }} (full link: {{ demo_url }}).
+{%- else -%}
+You can see examples of my work and the services I offer at
+{{ demo_visible_url }} (full link: {{ demo_url }}).
+{%- endif %}
+
+Hit reply if any of this resonates — even just to ask a question about
+which one would help most. Otherwise feel free to ignore. Either way,
+wishing {{ business_name }} a great rest of your week.
+
+— Nate Suderman
+Founder, Sudco Solutions
+nate@sudcosolutions.com
+sudcosolutions.com

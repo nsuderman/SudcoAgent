@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ subject_preview | default("Re: a note from Sudco Solutions", true) }}</title>
+</head>
+<body style="margin:0; padding:0; background:#f6f7f9; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; color:#2c3e50;">
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#f6f7f9; padding:32px 16px;">
+<tr><td align="center">
+
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px; background:#ffffff; border-radius:8px; box-shadow:0 1px 3px rgba(0,0,0,0.06); overflow:hidden;">
+
+<!-- Brand strip with logo mark -->
+<tr><td style="background-color:#6366F1; background-image:linear-gradient(135deg, #6366F1 0%, #06B6D4 100%); padding:18px 28px;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0">
+<tr>
+<td valign="middle" style="padding-right:14px;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+<td align="center" valign="middle" style="width:36px; height:36px; background:#ffffff; border-radius:8px; font-family:Helvetica,Arial,sans-serif; font-size:20px; font-weight:bold; color:#6366F1; line-height:36px;">S</td>
+</tr></table>
+</td>
+<td valign="middle">
+<div style="font-size:16px; color:#ffffff; font-weight:600; letter-spacing:0.3px;">Sudco Solutions</div>
+<div style="font-size:12px; color:#e0e7ff; margin-top:2px;">Small-business websites, reputation &amp; visibility &middot; Houston, TX</div>
+</td>
+</tr>
+</table>
+</td></tr>
+
+<!-- Body -->
+<tr><td style="padding:28px 28px 8px 28px; font-size:15px; line-height:1.6;">
+
+<p style="margin:0 0 16px 0;">Hi {{ recipient_name | default("there", true) }},</p>
+
+<p style="margin:0 0 16px 0;">Just bumping this up &mdash; wanted to make sure my note didn't end up in spam. No pressure either way, but figured I'd resurface it once.</p>
+
+{% if site_observation -%}
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 16px 0;">
+<tr><td style="padding:12px 16px; background:#f5f3ff; border-left:3px solid #6366F1; border-radius:2px; color:#2c3e50; font-style:italic;">{{ site_observation }}</td></tr>
+</table>
+{%- endif %}
+
+<p style="margin:0 0 12px 0;">Quick version of what I help with &mdash; one of these four, depending on where <strong>{{ business_name }}</strong> would benefit most:</p>
+
+<!-- Service tiers (compact) -->
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin:0 0 16px 0; border-collapse:separate; border-spacing:0 6px;">
+  <tr><td style="padding:10px 14px; background:#fafbfc; border-left:3px solid #6366F1; border-radius:2px; font-size:13px;">
+    <strong>Site refresh / full build</strong> &mdash; <span style="color:#6366F1;">$800 flat</span>, year of updates included
+  </td></tr>
+  <tr><td style="padding:10px 14px; background:#fafbfc; border-left:3px solid #06B6D4; border-radius:2px; font-size:13px;">
+    <strong>Google Business Profile + local SEO</strong> &mdash; <span style="color:#06B6D4;">$300&ndash;500 one-time</span>
+  </td></tr>
+  <tr><td style="padding:10px 14px; background:#fafbfc; border-left:3px solid #6366F1; border-radius:2px; font-size:13px;">
+    <strong>Review-request automation</strong> &mdash; <span style="color:#6366F1;">$200/month</span>, typically 2&ndash;3&times; review growth
+  </td></tr>
+  <tr><td style="padding:10px 14px; background:#fafbfc; border-left:3px solid #06B6D4; border-radius:2px; font-size:13px;">
+    <strong>Reputation monitoring + draft responses</strong> &mdash; <span style="color:#06B6D4;">$150/month</span>
+  </td></tr>
+</table>
+
+{% if has_demo -%}
+<p style="margin:0 0 16px 0;">Sample {{ industry_lower }} site: <a href="{{ demo_url }}" style="color:#6366F1; text-decoration:none; border-bottom:1px solid #6366F1;">{{ demo_visible_url }}</a>.</p>
+{%- else -%}
+<p style="margin:0 0 16px 0;">Examples + services: <a href="{{ demo_url }}" style="color:#6366F1; text-decoration:none; border-bottom:1px solid #6366F1;">{{ demo_visible_url }}</a>.</p>
+{%- endif %}
+
+<p style="margin:0 0 24px 0;">Reply with a question &mdash; even just &ldquo;tell me more about the review one&rdquo; &mdash; and I'll write back with specifics for <strong>{{ business_name }}</strong>. If you'd rather not hear from me again, just reply &ldquo;remove&rdquo; and I won't send anything else.</p>
+
+<!-- Signature with brand mark -->
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="100%" style="margin-top:8px; border-top:1px solid #e1e4e8; padding-top:18px;">
+<tr>
+<td valign="top" width="56" style="padding-right:14px;">
+<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+<td align="center" valign="middle" style="width:42px; height:42px; background-color:#6366F1; background-image:linear-gradient(135deg, #6366F1 0%, #06B6D4 100%); border-radius:9px; font-family:Helvetica,Arial,sans-serif; font-size:22px; font-weight:bold; color:#ffffff; line-height:42px;">S</td>
+</tr></table>
+</td>
+<td valign="top">
+<div style="font-size:15px; color:#2c3e50; font-weight:600;">Nate Suderman</div>
+<div style="font-size:13px; color:#7f8c8d; margin-top:2px;">Founder &middot; Sudco Solutions</div>
+<div style="font-size:13px; margin-top:8px; line-height:1.7;">
+<a href="mailto:nate@sudcosolutions.com" style="color:#6366F1; text-decoration:none;">nate@sudcosolutions.com</a><br>
+<a href="https://sudcosolutions.com" style="color:#6366F1; text-decoration:none;">sudcosolutions.com</a>
+</div>
+</td>
+</tr>
+</table>
+
+</td></tr>
+
+<!-- Footer -->
+<tr><td style="padding:18px 28px 22px 28px; background:#fafbfc; border-top:1px solid #eef0f2; font-size:11px; color:#95a5a6; line-height:1.5;">
+You're getting this because Sudco Solutions reached out to you about web/software help and didn't hear back. If you'd rather not get follow-ups, just reply with &ldquo;remove&rdquo; and we won't email you again.
+</td></tr>
+
+</table>
+
+</td></tr>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,87 @@
+{
+  "_doc": "Category packs for `agent sweep --query <q>`. Each pack is a list of freeform Foursquare query strings. Foursquare matches against business name + category. Edit freely — new packs and new queries are picked up automatically by sudco_agent.data.queries.",
+  "packs": {
+    "food": [
+      "bakery",
+      "cafe",
+      "coffee shop",
+      "deli",
+      "pizza",
+      "taqueria",
+      "food truck",
+      "ice cream",
+      "donut shop",
+      "butcher",
+      "caterer"
+    ],
+    "beauty": [
+      "salon",
+      "hair salon",
+      "barbershop",
+      "nail salon",
+      "spa",
+      "lash",
+      "med spa",
+      "tanning",
+      "tattoo"
+    ],
+    "personal_services": [
+      "dry cleaner",
+      "tailor",
+      "alterations",
+      "cobbler",
+      "shoe repair",
+      "locksmith",
+      "pet groomer",
+      "dog grooming",
+      "daycare",
+      "preschool",
+      "driving school",
+      "dance studio",
+      "music lessons",
+      "martial arts",
+      "karate",
+      "pilates",
+      "yoga",
+      "crossfit"
+    ],
+    "trades": [
+      "plumber",
+      "electrician",
+      "HVAC",
+      "handyman",
+      "roofer",
+      "landscaping",
+      "lawn care",
+      "pool service",
+      "pest control",
+      "auto repair",
+      "mechanic",
+      "tire shop",
+      "auto body",
+      "detailing"
+    ],
+    "specialty_retail": [
+      "florist",
+      "bookstore",
+      "record store",
+      "boutique",
+      "jeweler",
+      "bridal",
+      "frame shop",
+      "antique store",
+      "thrift store",
+      "consignment",
+      "pawn shop",
+      "vape shop"
+    ],
+    "health": [
+      "chiropractor",
+      "massage",
+      "acupuncture",
+      "physical therapy",
+      "dentist",
+      "optometrist"
+    ]
+  }
+}

@@ -1,0 +1,19 @@
+.env
+.env.*
+# Keep the example committed so users know what to fill in.
+!.env.example
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+data/*.db
+data/*.db-*
+data/screenshots/
+data/cache/
+# send-cold / process-bounces / overnight-run.sh write per-run logs that contain
+# real prospect emails and SMTP responses — never commit.
+data/logs/
+.DS_Store

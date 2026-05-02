@@ -1,0 +1,16 @@
+Subject: Re: A free preview of {{ business_name }}'s new website
+
+Hi {{ recipient_name | default("there") }},
+
+Bumping this up — wanted to make sure my email about the {{ business_name }}
+preview didn't end up in spam.
+
+Here's the link again, in case you missed it:
+
+    {{ preview_url }}
+
+If you're not interested, just reply "no thanks" and I'll stop following up.
+Otherwise I'd love to hear what you think.
+
+— Nate
+nate@sudcosolutions.com

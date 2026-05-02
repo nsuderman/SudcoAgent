@@ -1,0 +1,37 @@
+Subject: Re: Helping {{ business_name }} get more out of every review
+
+Hi {{ recipient_name | default("there", true) }},
+
+Just bumping this up — wanted to make sure my note didn't end up in
+spam. No pressure either way, but figured I'd resurface it once.
+
+{% if site_observation -%}
+{{ site_observation }}
+
+The quick version of what I help with is one of these four, depending
+on where {{ business_name }} would benefit most:
+{%- else -%}
+The quick version of what I help with is one of these four, depending
+on where {{ business_name }} would benefit most:
+{%- endif %}
+
+  • Site refresh / full build — $800 flat, year of updates included
+  • Google Business Profile + local SEO — $300–500 one-time
+  • Review-request automation — $200/month, typically 2–3× review growth
+  • Reputation monitoring + draft responses — $150/month
+
+{% if has_demo -%}
+Sample {{ industry_lower }} site: {{ demo_visible_url }} (full link: {{ demo_url }}).
+{%- else -%}
+Examples + services: {{ demo_visible_url }} (full link: {{ demo_url }}).
+{%- endif %}
+
+Reply with a question — even just "tell me more about the review one" —
+and I'll write back with specifics for {{ business_name }}. If you'd
+rather not hear from me again, just reply "remove" and I won't send
+anything else.
+
+— Nate Suderman
+Founder, Sudco Solutions
+nate@sudcosolutions.com
+sudcosolutions.com
